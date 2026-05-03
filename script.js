@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 使用 autoplay=1 & mute=1 允許自動播放
             cell.innerHTML = `
                 <iframe 
-                    src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=1" 
+                    src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=1&origin=${encodeURIComponent(window.location.origin)}" 
                     title="YouTube video player" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
