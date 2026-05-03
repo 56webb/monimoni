@@ -17,12 +17,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeCount = document.getElementById('active-count');
     const groupList = document.getElementById('group-list');
     const saveGroupBtn = document.getElementById('save-group-btn');
+    const shareUrlBtn = document.getElementById('share-url-btn');
 
     // 初始化
     renderChannelList();
     renderGroupList();
+    checkSharedURL();
 
     // 事件監聽器
+    shareUrlBtn.addEventListener('click', () => {
+        if (activeChannels.length === 0) {
+            alert('目前畫面上沒有頻道喔！請先加入想看的頻道。');
+            return;
+        }
+        updateURL(); // 確保網址是最新的
+        const shareUrl = window.location.href;
+        // 建立一個暫時的 input 來複製
+        const tempInput = document.createElement('input');
+        tempInput.value = shareUrl;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+            document.execCommand('copy');
+            alert('網址已經複製到剪貼簿了！\n現在你可以把這個網址貼給朋友，他們點開就會看到一模一樣的頻道組合！');
+        } catch (err) {
+            prompt('請手動複製以下網址：', shareUrl);
+        }
+        document.body.removeChild(tempInput);
+    });
+
     dashboardBtn.addEventListener('click', openModal);
     closeModalBtn.addEventListener('click', closeModal);
     dashboardModal.addEventListener('click', (e) => {
@@ -214,6 +237,57 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('匯入失敗：無效的備份代碼，請確認代碼是否完整複製沒有漏字。');
         }
     });
+
+    function updateURL() {
+        const url = new URL(window.location.href);
+        if (activeChannels.length > 0) {
+            url.searchParams.set('c', activeChannels.join(','));
+        } else {
+            url.searchParams.delete('c');
+        }
+        // 使用 replaceState 更新網址列但不產生歷史紀錄
+        window.history.replaceState({}, '', url);
+    }
+
+    async function checkSharedURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedChannelsStr = urlParams.get('c');
+        
+        if (sharedChannelsStr) {
+            const sharedIds = sharedChannelsStr.split(',').filter(id => id.trim() !== '');
+            if (sharedIds.length === 0) return;
+
+            let needSave = false;
+            
+            // 由於可能需要去抓取影片標題（若不在頻道庫中），這裡給予提示
+            const originalTitle = document.title;
+            document.title = "載入分享畫面中...";
+            
+            for (const id of sharedIds) {
+                // 如果這台電腦沒有存過這個頻道，去抓資訊
+                if (!channels.some(c => c.id === id)) {
+                    try {
+                        const videoDetails = await fetchVideoDetails(id);
+                        channels.push(videoDetails);
+                        needSave = true;
+                    } catch (error) {
+                        console.error("Failed to load shared channel:", id);
+                    }
+                }
+                
+                // 加入監控畫面
+                if (!activeChannels.includes(id) && activeChannels.length < MAX_CHANNELS) {
+                    activeChannels.push(id);
+                }
+            }
+            
+            if (needSave) saveChannels();
+            
+            document.title = originalTitle;
+            updateGrid();
+            renderChannelList();
+        }
+    }
 
     // 輔助函數
     function extractVideoId(url) {
@@ -432,6 +506,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleMonitor(id);
             });
         });
+
+        // 每次網格更新時，同步更新網址
+        updateURL();
     }
 
     function renderChannelList() {
