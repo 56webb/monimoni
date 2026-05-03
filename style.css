@@ -438,6 +438,28 @@ input[type="text"]:focus, textarea:focus {
     opacity: 1;
 }
 
+/* Custom Grid Layout Icons */
+.layout-icon {
+    display: grid;
+    gap: 3px;
+    width: 22px;
+    height: 22px;
+    pointer-events: none;
+}
+.layout-icon span {
+    background: var(--text-muted);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+.icon-chip:hover .layout-icon span {
+    background: var(--accent-color);
+    box-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+}
+.grid-2-icon { grid-template-columns: 1fr 1fr; }
+.grid-4-icon { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.grid-6-icon { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; width: 26px; height: 18px; }
+.grid-9-icon { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
+
 .channel-list-section {
     margin-top: 30px;
     display: flex;
