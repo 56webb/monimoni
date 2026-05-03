@@ -27,7 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addYtBtn.addEventListener('click', handleAddChannel);
     ytUrlInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleAddChannel();
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleAddChannel();
+        }
     });
 
     // 快速排版選擇器事件
@@ -103,35 +106,63 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = ytUrlInput.value.trim();
         if (!input) return;
 
-        const videoId = extractVideoId(input);
-        if (!videoId) {
-            alert('請輸入有效的 YouTube 網址或影片 ID');
-            return;
-        }
-
-        // 檢查是否已存在
-        if (channels.some(c => c.id === videoId)) {
-            alert('此頻道已在您的清單中');
-            ytUrlInput.value = '';
-            return;
-        }
+        // 支援多網址，用空白或逗號或換行分割
+        const urls = input.split(/[\s,]+/).filter(u => u.trim() !== '');
+        if (urls.length === 0) return;
 
         // 顯示載入狀態
         const originalBtnText = addYtBtn.innerHTML;
-        addYtBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 載入中';
+        addYtBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 處理中';
         addYtBtn.disabled = true;
 
-        try {
-            const videoDetails = await fetchVideoDetails(videoId);
-            channels.push(videoDetails);
-            saveChannels();
-            renderChannelList();
-            ytUrlInput.value = '';
-        } catch (error) {
-            alert('無法獲取影片資訊，請確認連結正確');
-        } finally {
-            addYtBtn.innerHTML = originalBtnText;
-            addYtBtn.disabled = false;
+        let addedCount = 0;
+        let dupCount = 0;
+        let errCount = 0;
+
+        for (const url of urls) {
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                errCount++;
+                continue;
+            }
+
+            // 檢查是否已存在
+            if (channels.some(c => c.id === videoId)) {
+                dupCount++;
+                continue;
+            }
+
+            try {
+                const videoDetails = await fetchVideoDetails(videoId);
+                channels.push(videoDetails);
+                addedCount++;
+            } catch (error) {
+                errCount++;
+            }
+        }
+
+        saveChannels();
+        renderChannelList();
+
+        addYtBtn.innerHTML = originalBtnText;
+        addYtBtn.disabled = false;
+
+        // 給予結果回饋
+        if (urls.length === 1) {
+            if (addedCount > 0) {
+                ytUrlInput.value = '';
+            } else if (dupCount > 0) {
+                alert('此頻道已在您的清單中');
+                ytUrlInput.value = '';
+            } else {
+                alert('無法獲取影片資訊，請確認連結格式正確');
+            }
+        } else {
+            // 批次匯入回饋
+            alert(`批次處理完成！\n✅ 成功新增: ${addedCount} 個\n⚠️ 重複跳過: ${dupCount} 個\n❌ 格式錯誤: ${errCount} 個`);
+            if (addedCount > 0 || dupCount > 0) {
+                ytUrlInput.value = '';
+            }
         }
     }
 
