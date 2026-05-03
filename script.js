@@ -30,11 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') handleAddChannel();
     });
 
-    // 快捷選擇器事件
-    document.querySelectorAll('.chip-btn').forEach(btn => {
+    // 快速排版選擇器事件
+    document.querySelectorAll('.layout-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            ytUrlInput.value = e.currentTarget.dataset.url;
-            handleAddChannel();
+            const count = parseInt(e.currentTarget.dataset.count, 10);
+            if (channels.length === 0) {
+                alert('頻道庫目前是空的！請先新增一些頻道。');
+                return;
+            }
+            
+            // 選擇最新的 N 個頻道 (依據 reverse 後的陣列)
+            const sortedChannels = [...channels].reverse();
+            const targetCount = Math.min(count, sortedChannels.length);
+            
+            activeChannels = sortedChannels.slice(0, targetCount).map(c => c.id);
+            
+            updateGrid();
+            renderChannelList();
+            
+            if (sortedChannels.length < count) {
+                // 可選：提示使用者頻道不夠
+                console.log(`頻道數量不足 ${count} 個，已顯示 ${sortedChannels.length} 個`);
+            }
         });
     });
 
