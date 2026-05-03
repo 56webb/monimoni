@@ -717,3 +717,53 @@ input[type="text"]:focus, textarea:focus {
     background: var(--danger-color);
     color: #fff;
 }
+
+/* --- 手機版響應式設計 (Mobile Responsive) --- */
+@media (max-width: 768px) {
+    /* 1. 將網格改為上下垂直排列 */
+    .grid-container {
+        display: flex !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+        gap: 15px !important;
+        padding-bottom: 30px;
+    }
+
+    /* 2. 每個影片保持 16:9 比例 */
+    .monitor-cell {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9;
+        flex-shrink: 0; /* 防止被 flex 擠壓變形 */
+    }
+
+    /* 3. 調整頂部 Header 排版 */
+    .glass-header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .header-controls button {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        margin-right: 0 !important;
+    }
+
+    /* 4. 控制面板寬度與按鈕文字微調 */
+    .modal-content.glass-panel {
+        width: 95%;
+        margin-right: 0; /* 覆蓋大螢幕靠右的設定 */
+        align-self: center;
+    }
+
+    #share-url-btn span {
+        display: none; /* 手機版太擠時，可以考慮用 CSS 隱藏文字，但我們目前沒包 span，先留著 */
+    }
+}
