@@ -488,37 +488,44 @@ input[type="text"]:focus, textarea:focus {
 }
 
 .action-btn {
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid rgba(0, 240, 255, 0.3);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 240, 255, 0.02));
+    border: 1px solid rgba(0, 240, 255, 0.4);
     color: var(--accent-color);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    transition: all 0.2s;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .action-btn:hover {
     background: var(--accent-color);
     color: #000;
     transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
 }
 
 .group-chip {
     display: flex;
     align-items: center;
-    background: rgba(15, 15, 30, 0.8);
+    background: linear-gradient(135deg, rgba(20, 20, 40, 0.8), rgba(15, 15, 30, 0.9));
     border: 1px solid var(--glass-border);
-    padding: 6px 12px;
-    border-radius: 20px;
+    padding: 8px 16px;
+    border-radius: 30px;
     font-size: 0.85rem;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     cursor: pointer;
 }
 
 .group-chip:hover {
     border-color: var(--accent-color);
-    box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+    background: rgba(0, 240, 255, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 240, 255, 0.15);
+    transform: translateY(-1px);
 }
 
 .group-name {
