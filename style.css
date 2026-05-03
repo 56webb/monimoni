@@ -400,24 +400,42 @@ input[type="text"]:focus, textarea:focus {
 }
 
 .icon-chip {
-    background: rgba(0, 240, 255, 0.05);
-    border: 1px solid rgba(0, 240, 255, 0.3);
-    color: var(--accent-color);
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    transition: all 0.2s;
+    background: rgba(15, 15, 25, 0.6);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-chip::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .icon-chip:hover {
-    background: var(--accent-color);
-    color: #000;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 240, 255, 0.2);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 240, 255, 0.2), inset 0 0 10px rgba(0, 240, 255, 0.1);
+}
+
+.icon-chip:hover::before {
+    opacity: 1;
 }
 
 .channel-list-section {
