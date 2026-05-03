@@ -30,6 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') handleAddChannel();
     });
 
+    // 快捷選擇器事件
+    document.querySelectorAll('.chip-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            ytUrlInput.value = e.currentTarget.dataset.url;
+            handleAddChannel();
+        });
+    });
+
     // 處理空狀態按鈕綁定 (使用事件委派，因按鈕會被重新渲染)
     document.addEventListener('click', (e) => {
         if (e.target && e.target.id === 'empty-add-btn') {

@@ -372,6 +372,49 @@ input[type="text"]:focus {
     margin-top: 8px;
 }
 
+.quick-selector {
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.quick-selector h4 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.quick-selector h4 i {
+    color: var(--accent-color);
+    margin-right: 5px;
+}
+
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip-btn {
+    background: rgba(0, 240, 255, 0.05);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    color: var(--accent-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.chip-btn:hover {
+    background: var(--accent-color);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 240, 255, 0.2);
+}
+
 .channel-list-section {
     margin-top: 30px;
     display: flex;
