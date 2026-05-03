@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多頻道監視器 - YT Live Monitor</title>
+    <meta name="description" content="同時觀看多個 YouTube 直播頻道的多頻道監視器">
+    <meta name="referrer" content="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="glass-header">
+            <div class="logo">
+                <i class="fa-solid fa-satellite-dish"></i>
+                <h1>YT Monitor <span>Command Center</span></h1>
+            </div>
+            <div class="header-controls">
+                <span id="active-count">0 / 9 頻道</span>
+                <button id="dashboard-btn" class="glow-btn">
+                    <i class="fa-solid fa-table-columns"></i> 控制面板
+                </button>
+            </div>
+        </header>
+
+        <main id="monitor-grid" class="grid-container empty">
+            <div class="empty-state">
+                <i class="fa-brands fa-youtube"></i>
+                <h2>系統待命中</h2>
+                <p>請開啟控制面板新增並選擇要監控的頻道</p>
+                <button id="empty-add-btn" class="glow-btn outline">開啟控制面板</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Dashboard Modal -->
+    <div id="dashboard-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-sliders"></i> 頻道控制面板</h2>
+                <button id="close-modal-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="add-channel-section">
+                    <h3>新增頻道</h3>
+                    <div class="input-group">
+                        <input type="text" id="yt-url-input" placeholder="輸入 YouTube 影片網址或 ID...">
+                        <button id="add-yt-btn" class="primary-btn"><i class="fa-solid fa-plus"></i> 新增</button>
+                    </div>
+                    <p class="helper-text">支援 YouTube 直播或一般影片連結</p>
+                </div>
+
+                <div class="channel-list-section">
+                    <h3>頻道庫 (<span id="library-count">0</span>)</h3>
+                    <ul id="channel-list" class="custom-scrollbar">
+                        <!-- Channel items will be injected here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
