@@ -69,6 +69,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 處理 Esc 鍵退出放大模式
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const focusedCell = document.querySelector('.monitor-cell.focused');
+            if (focusedCell) {
+                focusedCell.classList.remove('focused');
+                focusedCell.querySelector('.focus-btn i').className = 'fa-solid fa-expand';
+            }
+        }
+    });
+
     // 群組功能
     saveGroupBtn.addEventListener('click', () => {
         if (activeChannels.length === 0) {
@@ -307,15 +318,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     allowfullscreen>
                 </iframe>
                 <div class="cell-overlay">
-                    <div class="cell-title" style="color: white; text-shadow: 1px 1px 3px black; font-size: 0.95rem; font-weight: 500; max-width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div class="cell-title" style="color: white; text-shadow: 1px 1px 3px black; font-size: 0.95rem; font-weight: 500; max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         ${channel.title}
                     </div>
-                    <button class="remove-monitor-btn" data-id="${id}">
-                        <i class="fa-solid fa-xmark"></i> 關閉
-                    </button>
+                    <div class="cell-actions" style="display: flex; gap: 8px;">
+                        <button class="focus-btn" data-id="${id}" title="放大/縮小 (Esc)">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                        <button class="remove-monitor-btn" data-id="${id}" title="關閉視窗">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
                 </div>
             `;
             monitorGrid.appendChild(cell);
+
+            // 放大按鈕邏輯
+            const focusBtn = cell.querySelector('.focus-btn');
+            focusBtn.addEventListener('click', (e) => {
+                const isFocused = cell.classList.contains('focused');
+                
+                // 移除所有人的 focused
+                document.querySelectorAll('.monitor-cell.focused').forEach(c => {
+                    c.classList.remove('focused');
+                    c.querySelector('.focus-btn i').className = 'fa-solid fa-expand';
+                });
+
+                if (!isFocused) {
+                    cell.classList.add('focused');
+                    focusBtn.querySelector('i').className = 'fa-solid fa-compress';
+                }
+            });
         });
 
         // 綁定關閉按鈕事件
