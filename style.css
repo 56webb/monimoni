@@ -460,6 +460,86 @@ input[type="text"]:focus, textarea:focus {
 .grid-6-icon { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; width: 26px; height: 18px; }
 .grid-9-icon { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
 
+/* Group Section */
+.group-section {
+    margin-top: 25px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.group-header h4 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.group-header h4 i {
+    color: var(--accent-color);
+    margin-right: 5px;
+}
+
+.action-btn {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    color: var(--accent-color);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--accent-color);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
+}
+
+.group-chip {
+    display: flex;
+    align-items: center;
+    background: rgba(15, 15, 30, 0.8);
+    border: 1px solid var(--glass-border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.group-chip:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+}
+
+.group-name {
+    margin-right: 8px;
+    color: var(--text-main);
+}
+
+.delete-group-btn {
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    opacity: 0.6;
+    padding: 2px;
+    font-size: 0.8rem;
+}
+
+.delete-group-btn:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
 .channel-list-section {
     margin-top: 30px;
     display: flex;

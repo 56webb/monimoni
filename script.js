@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 狀態
     let channels = JSON.parse(localStorage.getItem('yt-monitor-channels')) || [];
+    let channelGroups = JSON.parse(localStorage.getItem('yt-monitor-groups')) || [];
     let activeChannels = [];
     const MAX_CHANNELS = 9;
 
@@ -14,9 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const channelList = document.getElementById('channel-list');
     const libraryCount = document.getElementById('library-count');
     const activeCount = document.getElementById('active-count');
+    const groupList = document.getElementById('group-list');
+    const saveGroupBtn = document.getElementById('save-group-btn');
 
     // 初始化
     renderChannelList();
+    renderGroupList();
 
     // 事件監聽器
     dashboardBtn.addEventListener('click', openModal);
@@ -64,6 +68,67 @@ document.addEventListener('DOMContentLoaded', () => {
             openModal();
         }
     });
+
+    // 群組功能
+    saveGroupBtn.addEventListener('click', () => {
+        if (activeChannels.length === 0) {
+            alert('當前畫面沒有頻道！請先在主畫面加入頻道後再儲存群組。');
+            return;
+        }
+        const groupName = prompt('請輸入群組名稱 (例如: 新聞台, 音樂, 遊戲等):');
+        if (!groupName || groupName.trim() === '') return;
+
+        const newGroup = {
+            id: Date.now().toString(),
+            name: groupName.trim(),
+            channels: [...activeChannels]
+        };
+
+        channelGroups.push(newGroup);
+        localStorage.setItem('yt-monitor-groups', JSON.stringify(channelGroups));
+        renderGroupList();
+    });
+
+    function renderGroupList() {
+        if (channelGroups.length === 0) {
+            groupList.innerHTML = '<span style="color: var(--text-muted); font-size: 0.8rem; margin-top: 5px;">目前沒有儲存的群組</span>';
+            return;
+        }
+
+        groupList.innerHTML = '';
+        channelGroups.forEach(group => {
+            const chip = document.createElement('div');
+            chip.className = 'group-chip';
+            chip.title = '點擊載入此群組';
+            
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'group-name';
+            nameSpan.textContent = `${group.name} (${group.channels.length})`;
+            
+            nameSpan.addEventListener('click', () => {
+                activeChannels = [...group.channels];
+                updateGrid();
+                renderChannelList();
+            });
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-group-btn';
+            deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            deleteBtn.title = '刪除群組';
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm(`確定要刪除「${group.name}」群組嗎？`)) {
+                    channelGroups = channelGroups.filter(g => g.id !== group.id);
+                    localStorage.setItem('yt-monitor-groups', JSON.stringify(channelGroups));
+                    renderGroupList();
+                }
+            });
+
+            chip.appendChild(nameSpan);
+            chip.appendChild(deleteBtn);
+            groupList.appendChild(chip);
+        });
+    }
 
     // 輔助函數
     function extractVideoId(url) {
