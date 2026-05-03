@@ -399,17 +399,21 @@ input[type="text"]:focus, textarea:focus {
     gap: 10px;
 }
 
-.chip-btn {
+.icon-chip {
     background: rgba(0, 240, 255, 0.05);
     border: 1px solid rgba(0, 240, 255, 0.3);
     color: var(--accent-color);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 1.2rem;
     transition: all 0.2s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.chip-btn:hover {
+.icon-chip:hover {
     background: var(--accent-color);
     color: #000;
     transform: translateY(-2px);
