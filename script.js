@@ -141,6 +141,70 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 備份與同步功能 (匯出/匯入)
+    const exportBtn = document.getElementById('export-btn');
+    const importBtn = document.getElementById('import-btn');
+    const backupInput = document.getElementById('backup-data-input');
+
+    exportBtn.addEventListener('click', () => {
+        const backupData = {
+            channels: channels,
+            groups: channelGroups
+        };
+        // 使用 Base64 編碼避免 JSON 字串太雜亂
+        const encodedData = btoa(encodeURIComponent(JSON.stringify(backupData)));
+        backupInput.style.display = 'block';
+        backupInput.value = encodedData;
+        backupInput.select();
+        try {
+            document.execCommand('copy');
+            alert('備份代碼已產生並自動複製到剪貼簿！\n請將這串代碼傳送給自己，並在另一台電腦貼上來匯入。');
+        } catch (err) {
+            alert('備份代碼已產生在下方框框中，請手動全選複製。');
+        }
+    });
+
+    importBtn.addEventListener('click', () => {
+        // 如果輸入框還沒顯示，先顯示它讓使用者貼上
+        if (backupInput.style.display === 'none') {
+            backupInput.style.display = 'block';
+            backupInput.focus();
+            return;
+        }
+
+        const inputData = backupInput.value.trim();
+        if (!inputData) {
+            alert('請先在輸入框中貼上您的備份代碼！');
+            return;
+        }
+
+        try {
+            const decodedData = JSON.parse(decodeURIComponent(atob(inputData)));
+            if (decodedData.channels && Array.isArray(decodedData.channels)) {
+                if (confirm('⚠️ 警告：匯入設定將會覆蓋這台電腦目前的頻道庫與群組！確定要繼續嗎？')) {
+                    channels = decodedData.channels;
+                    channelGroups = decodedData.groups || [];
+                    saveChannels();
+                    localStorage.setItem('yt-monitor-groups', JSON.stringify(channelGroups));
+                    
+                    // 清空當前畫面
+                    activeChannels = [];
+                    updateGrid();
+                    renderChannelList();
+                    renderGroupList();
+                    
+                    backupInput.value = '';
+                    backupInput.style.display = 'none';
+                    alert('匯入成功！您的頻道庫與群組已全數更新。');
+                }
+            } else {
+                throw new Error('Invalid format');
+            }
+        } catch (e) {
+            alert('匯入失敗：無效的備份代碼，請確認代碼是否完整複製沒有漏字。');
+        }
+    });
+
     // 輔助函數
     function extractVideoId(url) {
         // 處理各種 YouTube URL 格式

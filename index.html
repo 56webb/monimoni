@@ -88,10 +88,21 @@
                         <!-- Channel items will be injected here -->
                     </ul>
                 </div>
+
+                <!-- 系統設定與備份 -->
+                <div class="settings-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                    <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-database"></i> 備份與同步</h3>
+                    <p class="helper-text" style="margin-bottom: 10px;">將您的頻道庫與群組複製到其他電腦使用：</p>
+                    <div class="input-group" style="margin-top: 5px;">
+                        <button id="export-btn" class="action-btn"><i class="fa-solid fa-file-export"></i> 產生備份代碼</button>
+                        <button id="import-btn" class="action-btn" style="border-color: var(--success-color); color: var(--success-color);"><i class="fa-solid fa-file-import"></i> 貼上並匯入</button>
+                    </div>
+                    <textarea id="backup-data-input" rows="3" placeholder="點擊「產生備份代碼」會在此顯示您的設定；若要匯入其他電腦的設定，請在此貼上代碼後點擊「貼上並匯入」。" style="margin-top: 10px; display: none; font-family: monospace; font-size: 0.8rem;"></textarea>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
 </body>
 </html>
