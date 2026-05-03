@@ -29,6 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === dashboardModal) closeModal();
     });
 
+    // 滑鼠靠右邊緣自動開啟面板
+    document.addEventListener('mousemove', (e) => {
+        if (dashboardModal.classList.contains('hidden')) {
+            // 當滑鼠移動到距離右側邊緣 15px 內時觸發
+            if (e.clientX >= window.innerWidth - 15) {
+                openModal();
+            }
+        }
+    });
+
     addYtBtn.addEventListener('click', handleAddChannel);
     ytUrlInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
